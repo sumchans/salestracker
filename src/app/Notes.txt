@@ -1,0 +1,237 @@
+
+    <!-- Page Notes
+      {{ orderForm.value | json }}// to display the entered values at the bottom for reference
+    [(ngModel)]="addOrder.accountNumber" -->
+
+-------------------------------------------------------------------------------------------------
+TYPESCRIPT PART
+
+import { Component, OnInit } from '@angular/core';
+import { AddOrder } from '../models/addorder';
+import { FormControl, Validators } from '@angular/forms';
+
+@Component({
+  selector: 'addorder',
+  templateUrl: './addorder.component.html',
+  styleUrls: ['./addorder.component.css']
+})
+export class AddorderComponent implements OnInit {
+  addOrder = new AddOrder();
+  package = new FormControl('', [Validators.required]);
+  postDate = new FormControl('', [Validators.required]);
+  packages = [
+    {value: 'STV1', viewValue: 'Extra Small TV'},
+    {value: 'STV2', viewValue: 'Small TV'},
+    {value: 'STV3', viewValue: 'Medium TV'},
+    {value: 'STV4', viewValue: 'Large TV'}
+  ];
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+  addSale(orderForm) {
+    // alert("Thanks for submitting! Data: " + JSON.stringify(this.addOrder));
+    console.log(this.package.value);
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+MAT-SELECT & MATDATEPICKER combined control trial
+ <mat-select placeholder="Post Date" formControlName="postDate" (onOpen)="picker.open()">
+              <mat-option value="8555">Delay Crew - 8555</mat-option>
+              <mat-option value="9000">Self Install - 9000</mat-option>
+              <mat-option>
+                <mat-input-container>
+                  <input matInput [matDatepicker]="picker" (dateChange)="addEvent($event)">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-input-container>
+              </mat-option>
+            </mat-select>
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+FORMAT DATE Using Native Javascript
+  formatDate(date: Date) {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+//////////////////////////////////////////////////////////////////////////////////////////////////
+MAT-SELECT Tooltip example
+    <!-- <ng-container matColumnDef="notes">
+      <mat-header-cell *matHeaderCellDef> Notes </mat-header-cell>
+      <mat-cell *matCellDef="let workOrder">
+        <mat-icon class="mat-icon-color" matTooltip="{{workOrder.notes}}">notes</mat-icon>
+      </mat-cell>
+    </ng-container> -->
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+packages Array
+  // packages = [
+  //   {value: 'SMLBAS', viewValue: 'Limited TV'},
+  //   {value: 'STV1', viewValue: 'Extra Small TV'},
+  //   {value: 'STV2', viewValue: 'Small TV'},
+  //   {value: 'STV3', viewValue: 'Medium TV'},
+  //   {value: 'STV4', viewValue: 'Large TV'}
+  // ];
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Campaign Combobox
+        <!-- <div class="addSaleItems">
+                    <mat-form-field>
+                        <mat-select #campaign placeholder="Choose Campaign" formControlName="campaignName">
+                            <mat-option *ngFor="let campaign of bs.campaigns" [value]="campaign.campaignName">
+                                {{ campaign.campaignName }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('campaignName').hasError('required')">Please choose campaign</mat-error>
+                    </mat-form-field>
+                </div> -->
+
+mat-dialog-container {
+    position: fixed;
+    left: 20%;
+    top: 0%;
+    background-color: white;
+    /* z-index: 100000; */
+  }
+
+              <mat-chip-list formControlName="campaignName">
+                <mat-basic-chip *ngFor="let campaign of bs.campaigns" selected="true" (click)="selectedCampaign(campaign.campaignName)">
+                    {{ campaign.campaignName }}
+                </mat-basic-chip>
+            </mat-chip-list>
+/////MatBasicChip CSS
+              mat-basic-chip {
+    background-color:#367db9;
+    margin:0px 1px 4px 2px;
+    color:white;
+    padding: 10px;
+    border-style: solid;
+    border-width: 5px;
+    border-radius: 10px;
+    border-color: #e6f2ff;
+  }
+
+  <!-- MAT Tooltip & MatChip Reference
+<mat-form-field appearance="none" *ngFor="let title of addonTitles">
+    <h6 style="padding:0px">
+        <b>{{ title }}</b>
+    </h6>
+    <mat-chip-list *ngFor="let addon of bs.addons" style="float:left">
+        <mat-basic-chip *ngIf="addon.category === title" 
+        matTooltip="{{addon.addonName+' '+'$'+addon.price}}" 
+        matRippleselected="false" multiple="true"
+             (click)="selectAddon(addon.cbsCode)">
+            {{ addon.cbsCode }}
+        </mat-basic-chip>
+    </mat-chip-list>
+</mat-form-field>
+
+<div mat-dialog-actions style="float:right">
+    <button class="btn btn-outline-primary" (click)="closeDialog()">Close</button>
+    <button class="btn btn-outline-primary" [mat-dialog-close]="selectedAddons">Select</button>
+</div> -->
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MAT-CELL - Post Date column color setting based on crew and status
+<ng-container matColumnDef="postDate">
+                <mat-header-cell *matHeaderCellDef>
+                    <b>Post Status</b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let workOrder">
+                    <div *ngIf="workOrder.status === 'canceled'; else notCanceled" style="opacity: 0.6">
+                        <del>
+                            <div [ngStyle]="{'color': workOrder.status === 'posted' ? 'green' : '#1b3b50' }" style="text-align: center;" *ngIf="workOrder.crew === 'FFM'; else notOnFFM">FFM - {{ workOrder.postDate | momentDatePipe}}</div>
+                            <ng-template #notOnFFM>
+                                <div [ngStyle]="{'color': workOrder.status === 'posted' ? 'green' : '#1b3b50' }" *ngIf="workOrder.crew === '9000'; else delayCrew">
+                                    {{ workOrder.crew }} - {{workOrder.postDate | momentDatePipe }}</div>
+                                <ng-template #delayCrew>
+                                    <div style="color:red;">{{ workOrder.crew }} - {{workOrder.postDate | momentDatePipe }}</div>
+                                </ng-template>
+                            </ng-template>
+                        </del>
+                    </div>
+                    <ng-template #notCanceled>
+                        <div [ngStyle]="{'color': workOrder.status === 'posted' ? 'green' : '#1b3b50' }" style="text-align: center;" *ngIf="workOrder.crew === 'FFM'; else notOnFFM">FFM - {{ workOrder.postDate | momentDatePipe}}</div>
+                        <ng-template #notOnFFM>
+                            <div [ngStyle]="{'color': workOrder.status === 'posted' ? 'green' : '#1b3b50' }" *ngIf="workOrder.crew === '9000'; else delayCrew">
+                                {{ workOrder.crew }} - {{workOrder.postDate | momentDatePipe }}</div>
+                            <ng-template #delayCrew>
+                                <div style="color:red;">{{ workOrder.crew }} - {{workOrder.postDate | momentDatePipe }}</div>
+                            </ng-template>
+                        </ng-template>
+                    </ng-template>
+                </mat-cell>
+            </ng-container>
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------        
+
+                    <!-- <div *ngIf="workOrder.status === 'canceled'; else notCanceled" style="opacity: 0.3">
+                        <del><b>
+                            <div [ngStyle]="{'color': workOrder.status === 'posted' ? 'green' : '#1b3b50' }" style="text-align: center">{{ workOrder.crew }} - {{ workOrder.postDate | momentDatePipe}}</div>
+                        </b></del>
+                    </div>
+                    <ng-template #notCanceled>
+                        <div [ngStyle]="{'color': workOrder.status === 'posted' ? 'green' : '#1b3b50' }" style="text-align: center">{{ workOrder.crew }} -  {{ workOrder.postDate | momentDatePipe}}</div>
+                    </ng-template> -->    
+--------------------------------------------------------------------------------------------------
+ DATASOURCE IMPLEMENTATION
+ export class upgradesDataSource implements DataSource<any> {
+  private upgradeSubject = new BehaviorSubject<IUpgrades[]>([]);
+
+  constructor(private bs: BackendServices) { }
+
+  connect(): Observable<IUpgrades[]> {
+    return this.upgradeSubject.asObservable();
+  }
+
+  disconnect() { }
+
+  getUpgrades() {
+    this.bs.getUpgrades()
+      .subscribe((data: any) =>
+        this.upgradeSubject.next(data)
+      );
+  }
+
+  postUpgrade(upgrade: IUpgrades) {
+    this.bs.postUpgrade(upgrade)
+    .subscribe((response: any) => response = response.json,
+    error => console.log(error),
+          () => {
+            this.bs.getUpgrades();
+            // this.sb.openSnackBar("Sale Tracked Successfully!", 'Dismiss');
+          });
+  }
+}
+--------------------------------------------------------------------------------------------------
+
+ for (let i = 0; i < data.length; i++) {
+        this.campaigns.push(data[i].campaignName);
+        this.packages.push(data[i].packageName);
+      }
+      let counts = [];
+      this.campaigns.forEach(function (x) {
+        counts[x] = (counts[x] || 0) + 1;
+      });
+      this.theCounts = Object.assign(this.theCounts, counts);
+      console.log(this.theCounts);
+      this.campaigns = Array.from(new Set(this.campaigns));
+
+      for (let j=0; j<this.campaigns.length; j++) {
+        this.finalCount.push(this.campaigns[j]);
+      }
+
+-----------------------------------------------------------------------------------------------------
+Array reducing & sorting[Sorting part doesn't work]
+const campaigns = Array.from(new Set(this.campaigns));
+      for (let i=0; i<campaigns.length;i++) {
+        this.result[i] = new Array(2);
+        this.result[i][0] = campaigns[i];
+        this.result[i][1] = this.campaigns.filter(item => item === campaigns[i]).length;
+      }
+      this.result.sort(function(a,b) {
+        return a[1][1] - b[1][1];
+      });
+      console.log(this.result[1][1]);      

@@ -1,0 +1,122 @@
+<mat-icon (click)="onClose()" style="float:right;opacity:0.5;margin: 10px 10px 0px 0px;cursor:pointer;">close</mat-icon>
+<form *ngIf="bs.bottomSheetStartUpMode === 0" [formGroup]="editSaleForm" (ngSubmit)="onEdit()" novalidate style="background-color:#e6f2ff;height:auto;padding:7px;">
+    <!--novalidate specifies no validation to be done on the DOM-->
+    <mat-label>EDIT WORKORDER</mat-label>
+    <br>
+    <br>
+    <div>
+        <mat-form-field>
+            <input matInput #accountNumber placeholder="Account Number" formControlName="accountNumber">
+            <mat-hint align="end">{{ accountNumber.value.length }} / 13</mat-hint>
+            <mat-error *ngIf="editSaleForm.get('accountNumber').touched && editSaleForm.get('accountNumber').invalid">
+                <mat-error *ngIf="editSaleForm.get('accountNumber').hasError('minlength')">
+                    <strong>Account number has to be 13 digits!</strong>
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field style="float:right">
+            <input matInput placeholder="Customer Name" formControlName="customerName">
+        </mat-form-field>
+    </div>
+    <div class="matRadioButton">
+        <p style="padding:1px; color:#2775b4">
+            <b>Select Package</b>
+        </p>
+        <mat-radio-group formControlName="packageName">
+            <mat-radio-button class="pkgCampaignRadios" *ngFor="let pkg of bs.packages" [value]="pkg.cbsCode" [checked]="pkg.cbsCode === passedData.packageName">
+                {{pkg.cbsCode}}
+            </mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <button mat-button type="button" (click)="openAddonsDialog()" style="margin-top:10px;padding:3px;width:100%;background-color:#367db9;color:white;border-radius: 2px;">
+        <b>{{ selectedAddons | addonsSpaceAddPipe}}</b>
+        <!-- <b>{{ passedData.addons }}</b> -->
+    </button>
+    <div class="matRadioButton">
+        <p style="padding:1px; color:#2775b4">
+            <b>Select Campaign</b>
+        </p>
+        <mat-radio-group formControlName="campaignName">
+            <mat-radio-button class="pkgCampaignRadios" *ngFor="let campaign of bs.campaigns" [value]="campaign.campaignName" [checked]="campaign.campaignName === passedData.campaignName">
+                {{campaign.campaignName}}
+            </mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <div>
+        <mat-form-field style="max-width: 390px;">
+            <textarea matInput placeholder="Notes" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5" formControlName="notes"></textarea>
+        </mat-form-field>
+    
+        <div class="crewRadioButtons" style="float:right">
+            <mat-radio-group formControlName="crew" (change)="crewSelected($event.source.value)" >
+                <mat-radio-button value="FFM" (click)="datePicker.open()">FFM
+                </mat-radio-button>
+                <mat-radio-button value="9000">9000
+                </mat-radio-button>
+                <mat-radio-button value="9999">9999
+                </mat-radio-button>
+                <mat-radio-button value="8555" (click)="datePicker.open()">8555
+                </mat-radio-button>
+            </mat-radio-group>
+            <div style="align-items: center">
+                <h6 style="color:red;margin-left:140px" *ngIf="crew === 'FFM' || crew === '8555'">{{ datePickerInput.split("T")[0] | momentDatePipe }}</h6>
+            </div>
+        </div>
+        <mat-form-field style="padding:0px;width:1px;visibility:hidden;">
+            <input formControlName="postDate" #date matInput [matDatepicker]="datePicker" placeholder="" (dateInput)="addEvent(date)"
+                (dateChange)="addEvent(date)">
+            <mat-datepicker #datePicker></mat-datepicker>
+        </mat-form-field>
+    </div>
+    <button class="btn btn-success" type="submit" style="width:100%;height:50px;margin-top:10px;" mat-raised-button [disabled]="editSaleForm.invalid">
+        <mat-icon style="margin-right: 5px">save</mat-icon>SAVE CHANGES</button>
+</form>
+
+<!--***********************************************************************************************************************************************-->
+<!--UPGRADE FORM-->
+<form *ngIf="bs.bottomSheetStartUpMode === 1" [formGroup]="editUpgradeForm" (ngSubmit)="onEdit()" novalidate style="background-color:#e6f2ff;height:auto;padding:7px;">
+    <!--novalidate specifies no validation to be done on the DOM-->
+    <mat-label>EDIT WORKORDER</mat-label>
+    <br>
+    <br>
+    <div>
+        <mat-form-field>
+            <input matInput #accountNumber placeholder="Account Number" formControlName="accountNumber">
+            <mat-hint align="end">{{ accountNumber.value.length }} / 13</mat-hint>
+            <mat-error *ngIf="editSaleForm.get('accountNumber').touched && editSaleForm.get('accountNumber').invalid">
+                <mat-error *ngIf="editSaleForm.get('accountNumber').hasError('minlength')">
+                    <strong>Account number has to be 13 digits!</strong>
+                </mat-error>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field style="float:right">
+            <input matInput placeholder="Customer Name" formControlName="customerName">
+        </mat-form-field>
+    </div>
+    <br>
+    <br>
+    <div class="container" style="float:left;margin-left:0px;padding:0px;justify-content: center;border-style: solid; border-width:1px;border-color:#89b8df;background-color:#CBE7FE;width:100%;border-radius: 2px;">
+        <mat-label>ADDONS</mat-label>
+        <br>
+        <br>
+        <ul *ngFor="let title of bs.addonsCategory" style="clear:both">
+            <section style="color:#0d4069; ">
+                <b>{{ title }}</b>
+            </section>
+            <mat-divider></mat-divider>
+            <div>
+                <ul *ngFor="let addon of bs.addons" style="padding:0px;margin-top:5px;margin-bottom:5px;">
+                    <section *ngIf="addon.category === title" style="float:left;min-width:120px;">
+                        <mat-checkbox matTooltip="{{ addon.addonName }}" [matTooltipShowDelay]="500" [matTooltipHideDelay]="500" (change)="selectAddon($event)"
+                            [value]="addon.cbsCode" [checked]="isAddonSelected(addon.cbsCode)">
+                            <b>{{ addon.cbsCode }}</b>
+                        </mat-checkbox>
+                    </section>
+                </ul>
+            </div>
+        </ul>
+    </div>
+    <br>
+    <button class="btn btn-success" type="submit" style="width:100%;height:50px;margin-top:10px;" mat-raised-button [disabled]="editUpgradeForm.invalid">
+        <mat-icon style="margin-right: 5px">save</mat-icon>SAVE CHANGES</button>
+</form>

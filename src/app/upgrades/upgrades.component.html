@@ -1,0 +1,47 @@
+<div class="matCardForMatTable">
+        <mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="accountNumber">
+                <mat-header-cell *matHeaderCellDef>
+                    <b>Account</b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let upgrade">{{upgrade.accountNumber}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="customerName">
+                <mat-header-cell *matHeaderCellDef>
+                    <b>Customer</b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let upgrade">{{upgrade.customerName }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="addons">
+                <mat-header-cell *matHeaderCellDef>
+                    <b>ADDONS</b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let upgrade">{{ upgrade.addons }}
+                    <!-- <div *ngIf="spacingAddons(upgrade.addons)">{{ spacedAddons }}</div> -->
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="entryDate">
+                <mat-header-cell *matHeaderCellDef>
+                    <b>Entry Date</b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let upgrade">{{upgrade.entryDate | momentDatePipe }}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef>
+                    <b>Actions</b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let upgrade">
+                    <div class="mat-icon">
+                        <mat-icon (click)="onEditUpgrade(upgrade)" style="cursor: pointer" matTooltip="Edit WO" [matTooltipShowDelay]="500" [matTooltipHideDelay]="500">edit</mat-icon>
+                        <mat-icon style="margin-left: 6px;" (click)="onDelete(upgrade)" style="cursor: pointer;margin-left: 10px;" matTooltip="Delete WO" [matTooltipShowDelay]="500" [matTooltipHideDelay]="500">delete</mat-icon>
+                    </div>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columnsToDisplay;" [ngClass]="{'highlight': selectedRowIndex == row}" (click)="selectRow(row)">
+            </mat-row>
+        </mat-table>
+    </div>
+    <div class="footer">
+        <div style="font-size:14px;margin-left:15px">FETCHED: <b>{{ recordsFetched }}</b><em> Work Order(s)</em></div>
+    </div>

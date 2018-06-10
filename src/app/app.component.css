@@ -1,0 +1,11 @@
+.header {
+    position: fixed;
+    /* top: 0; */
+    z-index: 10;
+    /* width: 100%; */
+    background-color:#367db9;
+}
+/* input mat-input-element {
+    font-style: bold;
+    color: red;
+} */

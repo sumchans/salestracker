@@ -1,0 +1,29 @@
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+
+*{ 
+    font-family: 'PT Sans', sans-serif;
+    /* font-family: 'Roboto', sans-serif; */
+}
+.mat-expansion-panel-header {
+  border:none;
+}
+
+.mat-tab-label{
+    background: #dfedf8;
+    color:#061c2b;
+    font-style: bold;
+    border-style:solid;
+    border-width:0.1px;
+    border-color:#a0c8e9;
+  }
+  /* focus style */
+  .mat-tab-group.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus, .mat-tab-group.mat-primary .mat-tab-link:not(.mat-tab-disabled):focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:not(.mat-tab-disabled):focus{
+    background: #dce9f3;
+  }
+  /* ink bar style */
+  .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
+    background: #367db9;
+    height: 10px;
+  } 

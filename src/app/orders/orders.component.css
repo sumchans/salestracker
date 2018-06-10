@@ -1,0 +1,90 @@
+
+.filterButtonsDiv {
+  /* display:flex;
+  flex-direction: row; */
+  /* padding:0px; */
+  float:right;
+}
+.filterButtons {
+  margin-top:6px;
+  background-color:#e6eff7;
+  color:#1b3b50;
+  margin-right:1px;
+}
+.active {
+  background-color: rgb(134, 196, 134);
+}
+.MatTable {
+  background-color: rgb(247, 245, 245);
+  margin-top:20px;
+  padding:0px;
+  height:70vh;
+  overflow-x: hidden;
+}
+mat-table {
+  width: auto;
+}
+mat-header-cell {
+  color: white;
+  font-size: 14px;
+  text-transform: uppercase;
+  justify-content:center;
+  background-color: #367db9;
+}
+mat-header-row {
+  position: sticky;
+  top: 0.5px;
+  background: white;
+  z-index: 100;
+}
+mat-cell {
+  justify-content:center;
+  color: #081e2e;
+  font-size: 14px;
+  opacity: 0.9; 
+}
+.mat-icon {
+    color:#74acda;
+    display:flex; 
+    flex-direction: row; 
+    justify-content: center; 
+    opacity:0.8;
+}
+
+  .mat-row:hover {
+    background-color:#e3f2fd;
+  }
+  .mat-row.highlight{
+    background: #bbdefb
+  }
+
+.footer {
+  background-color: #2E7FB6;
+  color:white;
+  height:40px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/*SCROLLBAR CSS*/
+  ::-webkit-scrollbar {
+    width: 1px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgb(201, 201, 201); 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #367db9; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: red; 
+}
+
+

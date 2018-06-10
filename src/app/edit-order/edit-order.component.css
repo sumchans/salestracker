@@ -1,0 +1,54 @@
+
+  mat-form-field {
+    width:48%;
+  }
+  .matRadioButton {
+      background-color:#cce6ff;
+      padding: 10px;
+      margin: 0px 0px 3px 0px; 
+      justify-content: center;
+    }
+    .pkgCampaignRadios {
+      font-size: 13px;
+      font-style: bold;
+      padding:6px;
+      margin: 3px;
+      color:white;
+      border-color: #367db9;
+      border-style: solid;
+      border-width: 1px;
+      border-radius: 6px;
+      background-color: #89b8df;
+    } 
+    .crewRadioButtons {
+      padding:7px;
+      background-color: #cce6ff;
+      height:65px;
+      margin: 10px 10px 0px 0px;
+    }
+    mat-radio-button {
+      color:#1d67a3;
+      font-size: 17px;
+      font-style: bold;
+      color:#2E7FB6;
+      margin-left: 25px;
+    }
+
+     /* <!-- Upgrade Section --> */
+ mat-label {
+    font-style:bold;
+    font-size: 16px;
+    color:white;
+    border-radius: 2px;
+    background-color:#367db9;
+    padding:5px;
+    margin-bottom: 20px;
+  }
+
+  section mat-checkbox {
+    font-size: 13px;
+    padding:6px;
+    margin-top: 1px;
+    margin-bottom: 5px;
+    color:#2775b4;
+  }

@@ -1,0 +1,166 @@
+<!--MAIN CONTENT-->
+<mat-sidenav-container>
+    <mat-sidenav-content>
+        <div class="contentContainer">
+            <div style="margin-top:80px">
+                <div display="grid" grid-gap="1px" grid-template-columns="0.5fr 0.5fr" style="margin-left:10px">
+                    <button class="trackButtons" mat-raised-button type="button" (click)="sidenavOpen('sale',sidenav)">
+                        <b>SALE</b>
+                    </button>
+                    <button class="trackButtons" mat-raised-button type="button" (click)="sidenavOpen('upgrade',sidenav)">
+                        <b>UPGRADE</b>
+                    </button>
+                </div>
+            </div>
+            <div style="margin-top:80px">
+                <mat-tab-group #tab mat-stretch-tabs (selectedTabChange)="onTabClick($event)">
+                    <mat-tab label="SALES">
+                        <orders></orders>
+                    </mat-tab>
+                    <mat-tab label="UPGRADES">
+                        <upgrades></upgrades>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+            <div style="margin-top:80px">
+                <statsForMonth></statsForMonth>
+            </div>
+        </div>
+    </mat-sidenav-content>
+    <!--END-->
+
+    <!--SIDE CONTENT-->
+    <mat-sidenav #sidenav postion="start" mode="over">
+        <form class="saleForm" *ngIf="sidenavStartUpMode === 'sale'" [formGroup]="saleForm" (ngSubmit)="onSaleOrUpgrade()" novalidate>
+            <!--novalidate specifies no validation to be done on the DOM-->
+            <mat-icon (click)="sidenavClose(sidenav)">close</mat-icon>
+            <button class="btn btn-success" (click)="sidenavClose(sidenav)" type="submit" style="height:50px;margin:5px 15px 0px 0px;float:right"
+                mat-raised-button [disabled]="saleForm.invalid">SAVE</button>
+            <mat-label>TRACK SALE</mat-label>
+            <br>
+            <br>
+            <div>
+                <mat-form-field>
+                    <input matInput #accountNumber placeholder="Account Number" formControlName="accountNumber">
+                    <mat-hint align="end">{{ accountNumber.value.length }} / 13</mat-hint>
+                    <mat-error *ngIf="saleForm.get('accountNumber').touched && saleForm.get('accountNumber').invalid">
+                        <mat-error *ngIf="saleForm.get('accountNumber').hasError('minlength')">
+                            <strong>Account number has to be 13 digits!</strong>
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <br>
+            <div>
+                <mat-form-field>
+                    <input matInput placeholder="Customer Name" formControlName="customerName">
+                </mat-form-field>
+            </div>
+            <br>
+            <div class="matRadioButton">
+                <p style="padding:1px; color:#2775b4">
+                    <b>Select Package</b>
+                </p>
+                <mat-radio-group formControlName="packageName">
+                    <mat-radio-button class="pkgCampaignRadios" *ngFor="let pkg of bs.packages" [value]="pkg.cbsCode">
+                        {{pkg.cbsCode}}
+                    </mat-radio-button>
+                </mat-radio-group>
+                <button mat-button type="button" (click)="openAddonsDialog()" style="margin-top:10px;padding:3px;width:100%;background-color:#367db9;color:white;border-radius: 2px;">
+                    <b>{{selectedAddons | addonsSpaceAddPipe}}</b>
+                </button>
+            </div>
+
+            <div class="matRadioButton">
+                <p style="padding:1px; color:#2775b4">
+                    <b>Select Campaign</b>
+                </p>
+                <mat-radio-group formControlName="campaignName">
+                    <mat-radio-button class="pkgCampaignRadios" *ngFor="let campaign of bs.campaigns" [value]="campaign.campaignName">
+                        {{campaign.campaignName}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div>
+                <mat-form-field>
+                    <textarea matInput placeholder="Notes" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5" formControlName="notes"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="crewRadioButtons">
+                <mat-radio-group formControlName="crew" (change)="crewSelected($event.source.value)">
+                    <mat-radio-button value="FFM" (click)="datePicker.open()">FFM
+                    </mat-radio-button>
+                    <mat-radio-button value="9000">9000
+                    </mat-radio-button>
+                    <mat-radio-button value="9999">9999
+                    </mat-radio-button>
+                    <mat-radio-button value="8555" (click)="datePicker.open()">8555
+                    </mat-radio-button>
+                </mat-radio-group>
+                <div style="align-items: center">
+                    <h6 style="color:red;margin-left:140px" *ngIf="crew === 'FFM' || crew === '8555'">{{ datePickerInput }}</h6>
+                </div>
+            </div>
+            <div>
+                <mat-form-field style="padding:0px;width:1px;visibility:hidden;">
+                    <input formControlName="postDate" #date matInput [matDatepicker]="datePicker" placeholder="" (dateInput)="addEvent(date)"
+                        (dateChange)="addEvent(date)">
+                    <mat-datepicker #datePicker></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </form>
+
+        <!--***********************************************************************************************************************************************-->
+        <!--UPGRADE FORM-->
+        <form *ngIf="sidenavStartUpMode === 'upgrade'" [formGroup]="upgradeForm" (ngSubmit)="onSaleOrUpgrade()" novalidate style="background-color:#e6f2ff;height:auto;padding:7px;">
+            <!--novalidate specifies no validation to be done on the DOM-->
+            <mat-icon (click)="sidenavClose(sidenav)">close</mat-icon>
+            <button class="btn btn-success" (click)="sidenavClose(sidenav)" type="submit" style="height:50px;margin:5px 15px 0px 0px;float:right"
+                mat-raised-button [disabled]="upgradeForm.invalid">SAVE</button>
+            <mat-label>TRACK UPGRADE</mat-label>
+            <br>
+            <br>
+            <div>
+                <mat-form-field>
+                    <input matInput #accountNumber placeholder="Account Number" formControlName="accountNumber">
+                    <mat-hint align="end">{{ accountNumber.value.length }} / 13</mat-hint>
+                    <mat-error *ngIf="saleForm.get('accountNumber').touched && saleForm.get('accountNumber').invalid">
+                        <mat-error *ngIf="saleForm.get('accountNumber').hasError('minlength')">
+                            <strong>Account number has to be 13 digits!</strong>
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <br>
+            <div>
+                <mat-form-field>
+                    <input matInput placeholder="Customer Name" formControlName="customerName">
+                </mat-form-field>
+            </div>
+            <br>
+            <div class="container" style="float:left;margin-left:20px;padding:0px;justify-content: center;border-style: solid; border-width:1px;border-color:#89b8df;background-color:#CBE7FE;width:85%;border-radius: 4px;">
+                <mat-label>ADDONS</mat-label>
+                <br>
+                <br>
+                <ul *ngFor="let title of bs.addonsCategory" style="clear:both">
+                    <section style="color:#0d4069; ">
+                        <b>{{ title }}</b>
+                    </section>
+                    <mat-divider></mat-divider>
+                    <div>
+                        <ul *ngFor="let addon of bs.addons" style="padding:0px;margin-top:5px;margin-bottom:5px;">
+                            <section *ngIf="addon.category === title" style="float:left;min-width:120px;">
+                                <mat-checkbox matTooltip="{{ addon.addonName }}" [matTooltipShowDelay]="500" [matTooltipHideDelay]="500" (change)="selectAddon($event)"
+                                    [value]="addon.cbsCode">
+                                    <b>{{ addon.cbsCode }}</b>
+                                </mat-checkbox>
+                            </section>
+                        </ul>
+                    </div>
+                </ul>
+            </div>
+            <br>
+        </form>
+    </mat-sidenav>
+    <!--END-->
+</mat-sidenav-container>

@@ -1,0 +1,45 @@
+mat-table {
+  background-color: rgb(245, 248, 250);
+}
+.matCardForMatTable {
+  background-color: rgb(247, 245, 245);
+  margin-top:43px;
+  padding:10px;
+  height:70vh;
+  overflow-x: hidden;
+}
+mat-header-cell {
+    color: white;
+    font-size: 14px;
+    text-transform: uppercase;
+    justify-content:center;
+    background-color: #367db9;
+  }
+  mat-cell {
+    justify-content:center;
+    color: #1b3b50;   
+    font-size: 14px;
+    opacity: 0.9;
+  }
+  .mat-icon {
+      color:#74acda;
+      display:flex; 
+      flex-direction: row; 
+      justify-content: center; 
+    }
+    .mat-row:hover {
+      background-color:#e3f2fd;
+    }
+    .mat-row.highlight{
+      background: #bbdefb
+    }
+    .footer {
+      background-color: #2E7FB6;
+      color:white;
+      height:40px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  

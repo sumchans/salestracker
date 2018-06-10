@@ -1,0 +1,142 @@
+<div class="col">
+    <div class="filterButtonsDiv">
+        <button class="filterButtons" mat-button (click)="onCrewFilter('posted')" type="button">
+            <b>Posted</b>
+        </button>
+        <button class="filterButtons" mat-button (click)="onCrewFilter('FFM')" type="button">
+            <b>FFM</b>
+        </button>
+        <button class="filterButtons" mat-button (click)="onCrewFilter('9999')" type="button">
+            <b>9999</b>
+        </button>
+        <button class="filterButtons" mat-button (click)="onCrewFilter('9000')" type="button">
+            <b>9000</b>
+        </button>
+        <button class="filterButtons" mat-button (click)="onCrewFilter('8555')" type="button">
+            <b>8555</b>
+        </button>
+        <button class="filterButtons" mat-button (click)="onCrewFilter('canceled')" type="button">
+            <b>Canceled</b>
+        </button>
+        <button *ngIf="clearFiltersVisibility === true" class="filterButtons" style="color:red" mat-button (click)="onCrewFilter('clearFilters')"
+            type="button">
+            <b>Clear Filters</b>
+        </button>
+        <!-- <div>
+                <mat-form-field style="height:2px;width:200px">
+                    <input style="border:none" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                </mat-form-field>
+            </div> -->
+        <!-- <button class="filterButtons" mat-button *ngFor="let button of filterButtons" [ngClass]="{'active': button.isClicked}" (click)="onCrewFilter(button.text)">
+            <b>{{ button.text }}</b>
+        </button> -->
+        <button *ngIf="clearFiltersVisibility === true" class="filterButtons" style="color:red" mat-button (click)="onCrewFilter('clearFilters')">
+            <b>Clear Filters</b>
+        </button>
+    </div>
+    <br>
+    <div class="MatTable">
+        <mat-table [dataSource]="dataSource">
+            <div class="col-sm col-md col-lg col-xl" matColumnDef="accountNumber">
+                <mat-header-cell *matHeaderCellDef>
+                    <b>Account</b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let workOrder">
+                    {{workOrder.accountNumber}}
+                </mat-cell>
+            </div>
+            <div class="col-sm col-md col-lg col-xl" matColumnDef="customerName">
+                <mat-header-cell *matHeaderCellDef>
+                    <b>Customer</b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let workOrder">{{workOrder.customerName}}</mat-cell>
+            </div>
+            <div class="col-sm col-md col-lg col-xl" matColumnDef="packageName">
+                <mat-header-cell *matHeaderCellDef>
+                    <b>Package</b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let workOrder">
+                    <div *ngIf="isAddonsAttached(workOrder.addons); else noAddons">
+                        {{workOrder.packageName+' '}} +
+                        <span matTooltip="{{workOrder.addons}}" [matTooltipShowDelay]="1000" [matTooltipHideDelay]="500" style="color:brown">({{accountAddonsCount.length}})</span>
+                    </div>
+                    <ng-template #noAddons>
+                        {{workOrder.packageName}}
+                    </ng-template>
+                </mat-cell>
+            </div>
+            <div class="col-sm col-md col-lg col-xl" matColumnDef="campaignName">
+                <mat-header-cell *matHeaderCellDef>
+                    <b>Campaign</b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let workOrder">{{workOrder.campaignName}}</mat-cell>
+            </div>
+            <div class="col-sm col-md col-lg col-xl" matColumnDef="entryDate">
+                <mat-header-cell *matHeaderCellDef>
+                    <b>Entry Date</b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let workOrder">{{workOrder.entryDate.split("T")[0] | momentDatePipe }}</mat-cell>
+            </div>
+            <div class="col-sm col-md col-lg col-xl" matColumnDef="postDate">
+                <mat-header-cell *matHeaderCellDef>
+                    <b>Post Status</b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let workOrder" [ngSwitch]="workOrder.status">
+                    <div *ngSwitchCase="'posted'" style="color:green">
+                        {{ workOrder.crew }} - {{ workOrder.postDate.split("T")[0] | momentDatePipe}}
+                    </div>
+                    <div *ngSwitchCase="'pending'" style="color:#367db9">
+                        {{ workOrder.crew }} - {{ workOrder.postDate.split("T")[0] | momentDatePipe}}
+                    </div>
+                    <div *ngSwitchCase="'tentative'" style="color:red">
+                        {{ workOrder.crew }} - {{ workOrder.postDate.split("T")[0] | momentDatePipe}}
+                    </div>
+                    <div *ngSwitchCase="'canceled'" style="color:black;opacity:0.4">
+                        <del>{{ workOrder.crew }} - {{ workOrder.postDate.split("T")[0] | momentDatePipe}}</del>
+                    </div>
+                </mat-cell>
+            </div>
+            <div class="col-sm col-md col-lg col-xl" matColumnDef="notes">
+                <mat-header-cell *matHeaderCellDef>
+                    <b> Notes </b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let workOrder">
+                    <mat-expansion-panel #panel *ngIf="workOrder.notes !== ''" hideToggle="true" (mouseenter)="panel.open()" (mouseleave)="panel.close()">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title style="justify-content: center">
+                                <mat-icon style="color:#8fbbdf;">notes</mat-icon>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <mat-panel-description>
+                            {{ workOrder.notes }}
+                        </mat-panel-description>
+                    </mat-expansion-panel>
+                </mat-cell>
+            </div>
+            <div class="col-sm col-md col-lg col-xl" matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef>
+                    <b style="margin-left:60px">Actions</b>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let workOrder">
+                    <div class="mat-icon" style="justify-content:right">
+                        <mat-icon *ngIf="workOrder.status !== 'posted'" (click)="onEdit(workOrder)" style="cursor: pointer" matTooltip="Edit WO"
+                            [matTooltipShowDelay]="500" [matTooltipHideDelay]="500">edit</mat-icon>
+                        <mat-icon *ngIf="isShowCancel(workOrder.status)" style="cursor: pointer;margin-left: 10px;" (click)="canceled(workOrder)"
+                            matTooltip="Cancel WO" [matTooltipShowDelay]="500" [matTooltipHideDelay]="500">cancel</mat-icon>
+                        <mat-icon *ngIf="isShowPost(workOrder.crew,workOrder.status)" style="cursor: pointer;margin-left: 10px;" matTooltip="Post WO"
+                            [matTooltipShowDelay]="700" [matTooltipHideDelay]="500" (click)="onPostOff(workOrder)">done_all</mat-icon>
+                    </div>
+                </mat-cell>
+            </div>
+            <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columnsToDisplay;" [ngClass]="{'highlight': selectedRowIndex == row}" (click)="selectRow(row)">
+            </mat-row>
+        </mat-table>
+    </div>
+    <div class="footer">
+        <div style="margin-left:15px;font-size:14px;">FETCHED:
+            <b>{{ recordsFetched }}</b>
+            <em> Work Order(s)</em>
+        </div>
+    </div>
+</div>

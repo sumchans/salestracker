@@ -1,0 +1,109 @@
+mat-sidenav-content {
+  /* overflow-x: hidden; */
+  height:100vh;
+}
+.contentContainer {
+  display:grid;
+  grid-gap: 20px;
+  grid-template-columns: 1fr 6fr 1.5fr;
+}
+
+.trackButtons {
+  background-color:#3378a8;
+  color:white;
+  height:40px;
+  width:30px;
+  margin-top:4px;
+  margin-left:5px;
+}
+
+mat-form-field {
+  width:98%;
+}
+
+mat-sidenav {
+  background-color: #E6F2FE;
+  margin-top:61px;
+  width:25%;
+  /* overflow:hidden; */
+}
+mat-icon {
+  float:right;
+  opacity:0.5;
+  margin: 10px 10px 0px 0px;
+  cursor:pointer;
+}
+.saleForm {
+  background-color:#e6f2ff;
+  height:auto;
+  padding:7px;
+}
+.matRadioButton {
+    background-color:#cce6ff;
+    padding: 10px;
+    margin: 0px 0px 3px 0px; 
+    justify-content: center;
+  }
+  .pkgCampaignRadios {
+    font-size: 13px;
+    font-style: bold;
+    padding:6px;
+    margin: 3px;
+    color:white;
+    border-color: #367db9;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px;
+    background-color: #89b8df;
+  } 
+  .crewRadioButtons {
+    padding:7px;
+    background-color: #cce6ff;
+    height:65px;
+  }
+  mat-radio-button {
+    color:#1d67a3;
+    font-size: 17px;
+    font-style: bold;
+    color:#2E7FB6;
+    margin-left: 25px;
+  }
+  /* <!-- Upgrade Section --> */
+ mat-label {
+    font-style:bold;
+    font-size: 16px;
+    color:white;
+    border-radius: 2px;
+    background-color:#367db9;
+    padding:5px;
+    margin-bottom: 20px;
+  }
+
+  section mat-checkbox {
+    font-size: 13px;
+    padding:6px;
+    margin-top: 1px;
+    margin-bottom: 5px;
+    color:#2775b4;
+  }
+
+
+
+  /*SCROLLBAR CSS*/
+  ::-webkit-scrollbar {
+    width: 1px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgb(201, 201, 201); 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #367db9; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: red; 
+}

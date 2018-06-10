@@ -1,0 +1,21 @@
+<div class="container" style="float:left;padding:0px;background-color:#E6F2FE">
+    <ul *ngFor="let title of bs.addonsCategory" style="clear:both">
+        <section style="padding:0px;color:#0d4069;">
+            <b>{{ title }}</b>
+        </section>
+        <mat-divider></mat-divider>
+        <div>
+            <ul *ngFor="let addon of bs.addons" style="padding:0px;margin-top:5px;margin-bottom:5px;">
+                <section *ngIf="addon.category === title" style="float:left;min-width:120px;">
+                    <mat-checkbox matTooltip="{{ addon.addonName }}" [matTooltipShowDelay]="500" [matTooltipHideDelay]="500" (change)="selectAddon($event)" [value]="addon.cbsCode" [checked]="isAddonSelected(addon.cbsCode)">
+                        <b>{{ addon.cbsCode }}</b>
+                    </mat-checkbox>
+                </section>
+            </ul>
+        </div>
+    </ul>
+</div>
+<div mat-dialog-actions style="float:right">
+    <button class="btn btn-outline-primary" (click)="closeDialog()">Close</button>
+    <!-- <button class="btn btn-outline-primary" [mat-dialog-close]="selectedAddons">Select</button> -->
+</div>
